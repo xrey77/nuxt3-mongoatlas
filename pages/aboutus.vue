@@ -32,15 +32,3 @@
     </div>
     </div>
 </template>
-
-<script define lang="ts">
-definePageMeta({
-  pageTransition: {
-    name: 'rotate'
-  }
-})
-</script>
-
-
-<style scoped>
-</style>
