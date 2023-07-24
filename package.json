@@ -37,6 +37,7 @@
     "qrcode": "^1.5.3",
     "sass": "^1.63.6",
     "sass-loader": "^13.3.2",
-    "speakeasy": "^2.0.0"
+    "speakeasy": "^2.0.0",
+    "vercel": "^24.2.4"
   }
 }
