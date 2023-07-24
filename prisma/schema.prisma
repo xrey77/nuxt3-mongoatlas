@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = "mongodb+srv://vercel-admin-user:Reynalds88@cluster0.maowtb0.mongodb.net/Next13?retryWrites=true&w=majority"
+  url      = "mongodb+srv://vercel-admin-user-64be75479326081b7350af83@admin:Jigoro@cluster0.maowtb0.mongodb.net/Next13?retryWrites=true&w=majority"
 }
 
 model User {
