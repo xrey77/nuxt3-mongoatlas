@@ -51,7 +51,7 @@
     });
 
     const fetchProducts = async (pg) => {
-        await $fetch(`/api/product/list?page=${pg}`)
+        await $fetch(`/api/product/list?page=${pg}`, { server: false})
         .then((data) => {
             vardata.page = data.page;
             vardata.totpage = data.totpages;
