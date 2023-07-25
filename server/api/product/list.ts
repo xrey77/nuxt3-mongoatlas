@@ -10,14 +10,13 @@ export default defineEventHandler(async (event: any) => {
         let totpage: any = Math.ceil(totrecs / perpage);
         let page: any = query?.page;
         let offset: any = (page -1) * perpage;
-        console.log(totpage);
         const products = await prisma.product.findMany({
             skip: offset,
             take: perpage
         });
         return {totpages: totpage, page: parseInt(page), products: products};
 
-    } catch(e: any) {
-        return {statuscode: 404, message: e.message};
+    } catch(e) {
+        return {statuscode: 404, message: "Unable to load data."};
     }    
 });

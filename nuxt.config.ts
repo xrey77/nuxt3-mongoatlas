@@ -2,7 +2,8 @@ import { resolve } from 'path';
 
 export default defineNuxtConfig({
   experimental: {
-    payloadExtraction: true
+    payloadExtraction: true,
+    suspensible: false
   },  
   app: {
       head: {
