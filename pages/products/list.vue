@@ -57,6 +57,9 @@
             vardata.totpage = data.totpages;
             vardata.items = data.products;
             vardata.listMsg = '';
+        }).
+        catch((error) => {
+            console.log("may error : " + error);
         });
     }
 
