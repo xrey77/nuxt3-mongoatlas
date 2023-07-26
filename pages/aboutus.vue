@@ -1,5 +1,4 @@
 <template>
-<Transition name="fade">
 <div class="container">
         <h1 class="text-center mt-3 mb-5">About Us Page</h1>
         <div class="container">
@@ -31,6 +30,5 @@
             The sporty XL125Z and the powerful TM125 were launched.
         </p>
     </div>
-    </div>
-</Transition>    
+</div>
 </template>

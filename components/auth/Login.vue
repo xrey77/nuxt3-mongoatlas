@@ -75,7 +75,7 @@
         e.preventDefault()
         form.isDisabled=true;
         $("#loginMsg").text("please wait..");
-        await $fetch('/api/auth/signin', {
+        const data = await $fetch('/api/auth/signin', {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -84,8 +84,16 @@
                 username: form.username,
                 password: form.password
             }
-        }).then((data) => {
-            if (data.statuscode === 200) {
+        }).catch( (error: any) => {
+            form.isDisabled=false;
+            $("#loginMsg").text("Username not found.");
+            window.setTimeout(() => {
+                $("#loginMsg").text("");
+            },3000);
+            return;
+        });
+
+        if (data.statuscode === 200) {
                 $("#loginMsg").text(data.message);
                 nuxtStorage.localStorage.setData('USERID', data.id, 4, 'h');
                 nuxtStorage.localStorage.setData('TOKEN', data.token, 4, 'h');
@@ -117,15 +125,7 @@
                 window.setTimeout(() => {
                     $("#loginMsg").text("");
                 },3000);
-            }
-        }).catch( (error) => {
-            form.isDisabled=false;
-            $("#loginMsg").text("Username not found.");
-            window.setTimeout(() => {
-                $("#loginMsg").text("");
-            },3000);
-        });
-
+            }        
 
     }
 

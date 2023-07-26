@@ -1,38 +1,44 @@
 <template>
 <div class="container">
+
     <div class="card mt-3 mb-4">
+
         <div class="card-header">
-          USER PROFILE NO.&nbsp; {{userId}}
+            USER PROFILE NO.&nbsp; {{userId}}
         </div>
+
         <div class="card-body">
-            <form @submit.prevent="submitProfileForm" enctype="multipart/form-data" autocomplete="off">
+        
+            <form @submit.prevent="submitProfileForm" enctype="multipart/form-data">
             <div class="row">
                 <div class="col">
-                    <div class="mb-3">
-
-                        <input type="text" v-model="user.firstname" required class="form-control" placeholder="enter First Name">
-                      </div>
-                      <div class="mb-3">
-                        <input type="text" v-model="user.lastname" required class="form-control" placeholder="enter Last Name">
-                      </div>
-                      <div class="mb-3">
-                        <input type="email"  v-model="user.email" class="form-control" :disabled="true">
-                      </div>
-                      <div class="mb-3">
-                        <input type="text" v-model="user.mobile" required class="form-control" placeholder="enter Mobile No.">
-                      </div>
+                       <div class="mb-3">
+                            <input type="text" v-model="user.firstname" required class="form-control" placeholder="enter First Name">
+                       </div>
+                       <div class="mb-3">
+                            <input type="text" v-model="user.lastname" required class="form-control" placeholder="enter Last Name">
+                       </div>
+                       <div class="mb-3">
+                            <input type="email" v-model="user.email" class="form-control" :disabled="true">
+                       </div>
+                       <div class="mb-3">
+                            <input type="text" v-model="user.mobile" required class="form-control" placeholder="enter Mobile No.">
+                       </div>                    
                 </div>
                 <div class="col">
+
                     <div class="mb-3 text-left">
-                        <img id="pix" class="userpic" :src="user.profilepic" name="profilepic" alt="profilepic" />
+                        <img id="pix" class="userpic" :src="user.profilepic" alt="profilepic" />
                     </div>
                     <div class="mb-3 text-left">
-                        <input @change="changeProfilepic" class="form-control form-control-sm"  name="userpic" id="userpic" type="file" accept=".png, .jpg, .jpeg, .gif">
+                        <input @change="changeProfilepic" class="form-control form-control-sm" id="userpic" type="file" accept=".png, .jpg, .jpeg, .gif">
                     </div>
+
                 </div>
             </div>
 
             <div class="row">
+
                 <div class="col">
                     <div class="form-check">
                         <input @change="changePassword" class="form-check-input" type="checkbox" value="" id="changepwd">
@@ -41,11 +47,11 @@
                         </label>
                     </div>
                     <div id="cpwd">
-                        <div class="mb-3">
-                            <input type="password" class="form-control"  v-model="user.password" name="password" placeholder="enter new Password" autocomplete="off">
+                          <div class="mb-3">
+                            <input type="password" class="form-control" v-model="user.password" placeholder="enter new Password" autocomplete="off">
                           </div>
                           <div class="mb-3">
-                            <input type="password" class="form-control" v-model="user.confpassword" name="confpassword" placeholder="confirm new Password" autocomplete="off">
+                            <input type="password" class="form-control" v-model="user.confpassword" placeholder="confirm new Password" autocomplete="off">
                           </div>
                     </div>
                     <div id="mfa1">
@@ -55,15 +61,14 @@
                         <div v-else>
                             <img class="qrcode2" src="/images/qrcode.png" alt="QRCODE" />
                         </div>
-
                     </div>
-
                 </div>
+
                 <div class="col">
                     <div class="form-check">
                         <input @change="onetimePassword" class="form-check-input" type="checkbox" value="" id="twofactor">
                         <label class="form-check-label" for="twofactor">
-                          2-Factor Authenticator
+                             2-Factor Authenticator
                         </label>
                     </div>
                     <div id="mfa2">
@@ -77,17 +82,18 @@
                                 <button @click="disableMFA" type="button" class="btn btn-secondary">Disable</button>
                             </div>
                         </div>
-
                     </div>
                 </div>
+
             </div>
             <button id="save" type="submit" class="btn btn-primary">save</button>
-        </form>
+            </form>
         </div>
         <div class="card-footer text-danger fsize-12">
             {{user.profileMsg}}
-          </div>
-      </div>
+        </div>
+    </div>
+
 </div>
 </template>
 
@@ -100,6 +106,7 @@
     const username = nuxtStorage.localStorage.getData('USERNAME');
     const userpic = nuxtStorage.localStorage.getData('USERPIC');
     const token = nuxtStorage.localStorage.getData('TOKEN');
+
     const user = reactive({
         firstname: '',
         lastname: '',
@@ -112,30 +119,33 @@
         profilepic: ''
     });
 
-    function checkIfImageExists(url, callback) {
+    function checkIfImageExists(url: any, callback: any) {
         const img = new Image();
         img.src = url;
 
         if (img.complete) {
-        callback(true);
-        } else {
-        img.onload = () => {
             callback(true);
-        };
+        } else {
+            img.onload = () => {
+                callback(true);
+            };
 
-        img.onerror = () => {
-            callback(false);
-        };
+            img.onerror = () => {
+                callback(false);
+            };
         }
     }
 
-    async function fetchData(idno) {
-        await $fetch(`/api/user/getbyid?id=${idno}`,{
+    async function fetchData(idno: any) {
+        const data = await $fetch(`/api/user/getbyid?id=${idno}`,{
             headers: {
                 Authorization:`Bearer ${token}`
             }
-        }).then((data) => {
-            user.lastname = data.lastname;
+        }).catch((error: any) => {
+            user.profileMsg = error;
+            return;
+        });
+        user.lastname = data.lastname;
             user.firstname = data.firstname;
             user.email = data.email;
             user.mobile = data.mobile;
@@ -149,7 +159,6 @@
             });
 
             user.profileMsg = '';
-        });
     }
 
     onMounted(() => {
@@ -159,7 +168,7 @@
         fetchData(userId);
     });
 
-    async function submitProfileForm(e) {
+    async function submitProfileForm(e: any) {
         e.preventDefault();
         if (user.password !== '' && user.confpassword) {
             if (user.password !== user.confpassword) {
@@ -167,7 +176,6 @@
                 window.setTimeout(() => {
                     user.profileMsg = "";
                 },3000);
-                return;
             }
         }
         else
@@ -176,13 +184,12 @@
             window.setTimeout(() => {
                 user.profileMsg = "";
             },3000);
-            return;
         }
 
         user.profileMsg = 'please wait...';
         const userIdno = nuxtStorage.localStorage.getData('USERID');
 
-        await $fetch('/api/user/updatebyid', {
+        const data = await $fetch('/api/user/updatebyid', {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization:`Bearer ${token}`
@@ -195,36 +202,33 @@
                   'password': user.password
                 }
 
-            }).then((data) => {
-
-                if (data.statuscode === 200) {
-                    user.profileMsg = data.message;
-                } else {
-                    user.profileMsg = data.message;
-                }
-                window.setTimeout(() => {
-                    user.profileMsg = "";
-                },6000);
-
-            }).catch( (error) => {
+            }).catch( (error: any) => {
                 $("#regMsg").text(error.message);
                 window.setTimeout(() => {
                     user.profileMsg = "";
                 },3000);
+                return;
             });
-
+            if (data.statuscode === 200) {
+                    user.profileMsg = data.message;
+            } else {
+                user.profileMsg = data.message;
+            }
+            window.setTimeout(() => {
+                user.profileMsg = "";
+            },6000);            
     }
 
     function changePassword() {
      if ($('#changepwd').is(":checked")) {
-      $("#cpwd").show();
-      $("#mfa1").hide();
-      $("#mfa2").hide();
-      $('#twofactor').prop('checked', false);
+        $("#cpwd").show();
+        $("#mfa1").hide();
+        $("#mfa2").hide();
+        $('#twofactor').prop('checked', false);
      } else {
-      $("#cpwd").hide();
-      user.password = '';
-      user.confpassword = '';
+        $("#cpwd").hide();
+        user.password = '';
+        user.confpassword = '';
      }
     }
 
@@ -240,9 +244,9 @@
         }
     }
 
-    async function enableMFA(e) {
+    async function enableMFA(e: any) {
         e.preventDefault();
-        await $fetch('/api/user/enablemfa', {
+        const data = await $fetch('/api/user/enablemfa', {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization:`Bearer ${token}`
@@ -253,29 +257,28 @@
                     'isenabled': true,
                     'fullname': user.firstname + ' ' + user.lastname
                 }
-            }).then((data) => {
-
-                if (data.statuscode === 200) {
-                    user.profileMsg = data.message;
-                } else {
-                    user.profileMsg = data.message;
-                }
-                window.setTimeout(() => {
-                    user.profileMsg = "";
-                    window.location.reload();
-                },6000);
 
             }).catch( (error) => {
                 $("#regMsg").text(error.message);
                 window.setTimeout(() => {
                     user.profileMsg = "";
                 },3000);
+                return;
             });
+            if (data.statuscode === 200) {
+                    user.profileMsg = data.message;
+            } else {
+                user.profileMsg = data.message;
+            }
+            window.setTimeout(() => {
+                user.profileMsg = "";
+                window.location.reload();
+            },6000);
     }
 
-    async function disableMFA(e) {
+    async function disableMFA(e: any) {
         e.preventDefault();
-        await $fetch('/api/user/enablemfa', {
+        const data = await $fetch('/api/user/enablemfa', {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization:`Bearer ${token}`
@@ -286,40 +289,47 @@
                     'isenabled': false,
                     'fullname': user.firstname + ' ' + user.lastname
                 }
-            }).then((data) => {
-
-                if (data.statuscode === 200) {
-                    user.profileMsg = data.message;
-                    window.location.reload();
-                } else {
-                    user.profileMsg = data.message;
-                }
-                window.setTimeout(() => {
-                    user.profileMsg = "";
-                },3000);
-
-            }).catch( (error) => {
+            }).catch( (error: any) => {
                 $("#regMsg").text(error.message);
                 window.setTimeout(() => {
                     user.profileMsg = "";
                 },3000);
+                return;
             });
+
+            if (data.statuscode === 200) {
+                    user.profileMsg = data.message;
+                    window.location.reload();
+            } else {
+                user.profileMsg = data.message;
+            }
+            window.setTimeout(() => {
+                user.profileMsg = "";
+            },3000);            
     }
-    async function changeProfilepic() {
+
+    async function changeProfilepic(event: any) {
         $("#pix").attr('src',URL.createObjectURL(event.target.files[0]));
         const file = event.target.files[0];
         const formdata = new FormData();
         formdata.append('myImage', file);
 
-        await $fetch(`/api/user/changeprofilepic?id=${userId}`, {
+        const data = await $fetch(`/api/user/changeprofilepic?id=${userId}`, {
                 headers: {
                     Authorization:`Bearer ${token}`
                 },
                 body: formdata,
                 method: 'POST',
-            }).then((data) => {
 
-                if (data.statuscode === 200) {
+            }).catch( (error: any) => {
+                $("#regMsg").text(error.message);
+                window.setTimeout(() => {
+                    user.profileMsg = "";
+                },3000);
+                return;
+            });
+
+            if (data.statuscode === 200) {
                     user.profileMsg = data.message;
                     nuxtStorage.localStorage.setData('USERPIC', data.profilepic, 4, 'h');
                 } else {
@@ -328,14 +338,8 @@
                 window.setTimeout(() => {
                     user.profileMsg = "";
                 },3000);
-
-            }).catch( (error) => {
-                $("#regMsg").text(error.message);
-                window.setTimeout(() => {
-                    user.profileMsg = "";
-                },3000);
-            });
-    }
+    
+            }
 </script>
 
 <style scoped>

@@ -50,31 +50,33 @@
         listMsg: 'loading data, please wait..'
     });
 
-    const fetchProducts = async (pg) => {
-        await $fetch(`/api/product/list?page=${pg}`, { server: false})
-        .then((data) => {
-            vardata.page = data.page;
-            vardata.totpage = data.totpages;
-            vardata.items = data.products;
-            vardata.listMsg = '';
-        }).
-        catch((error) => {
+    const fetchProducts = async (pg: any) => {
+        const data = await $fetch(`/api/product/list?page=${pg}`)
+        .catch((error: any) => {
             console.log("may error : " + error);
+            vardata.listMsg = error;
+            return;
         });
+        vardata.page = data.page;
+        vardata.totpage = data.totpages;
+        vardata.items = data.products;
+        if (vardata.items) {
+            vardata.listMsg = '';
+        }
     }
 
     onMounted(() => {
         fetchProducts(vardata.page);
     });
 
-    const firstPage = (event) => {
+    const firstPage = (event: any) => {
         event.preventDefault();
         vardata.page = 1;
         fetchProducts(vardata.page);
         return;
     }
 
-    const nextPage = (event) => {
+    const nextPage = (event: any) => {
         event.preventDefault();
         if (vardata.page == vardata.totpage) {
             return;
@@ -84,7 +86,7 @@
         return;
     }
 
-    const prevPage = (event) => {
+    const prevPage = (event: any) => {
         event.preventDefault();
         if (vardata.page == 1) {
             return;
@@ -94,7 +96,7 @@
         return;
     }
 
-    const lastPage = (event) => {
+    const lastPage = (event: any) => {
         event.preventDefault();
         vardata.page = vardata.totpage;
         fetchProducts(vardata.page);

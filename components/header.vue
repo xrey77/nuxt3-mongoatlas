@@ -47,7 +47,7 @@
               </a>
               <ul class="dropdown-menu">
                 <li><a @click="logout" class="dropdown-item" href="/#">LogOut</a></li>
-                <li><NuxtLink class="dropdown-item" to="/profile">Profile</NuxtLink></li>
+                <li><NuxtLink class="dropdown-item" to="/userprofile">Profile</NuxtLink></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><NuxtLink class="dropdown-item" to="/#">Messenger</NuxtLink></li>
               </ul>
@@ -130,7 +130,7 @@
             </a>
             <ul class="dropdown-menu">
               <li data-bs-dismiss="offcanvas"><NuxtLink @click="logout" class="dropdown-item" to="#">Logout</NuxtLink></li>
-              <li data-bs-dismiss="offcanvas"><NuxtLink class="dropdown-item" to="/profile">Profile</NuxtLink></li>
+              <li data-bs-dismiss="offcanvas"><NuxtLink class="dropdown-item" to="/userprofile">Profile</NuxtLink></li>
               <li><hr class="dropdown-divider"></li>
               <li data-bs-dismiss="offcanvas"><NuxtLink class="dropdown-item" to="/#">Messenger</NuxtLink></li>
             </ul>

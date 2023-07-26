@@ -34,7 +34,7 @@
         isDisabled: false
     });
 
-    function closeMFA(e) {
+    function closeMFA(e: any) {
         e.preventDefault();
         mfa.otpcode = '';
         mfa.Message = '';
@@ -42,12 +42,12 @@
         $("#mfaReset").click();
     }
 
-    async function submitOTP(e) {
+    async function submitOTP(e: any) {
         e.preventDefault();
         let userId = nuxtStorage.localStorage.getData('USERID');
         mfa.isDisabled=true;
         mfa.Message = 'please wait..';
-        await $fetch('/api/auth/validatetoken', {
+        const data = await $fetch('/api/auth/validatetoken', {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -57,31 +57,28 @@
                     otpcode: mfa.otpcode
                 }
 
-            }).then((data) => {
-
-                if (data.statuscode === 200) {
+            }).catch( (error: any) => {
+                mfa.Message(error.message);
+                window.setTimeout(() => {
+                    mfa.isDisabled=false;
+                    mfa.Message = "";
+                },3000);
+                return;
+            });
+            if (data.statuscode === 200) {
                     mfa.Message = data.message;
                     nuxtStorage.localStorage.setData('USERNAME', data.username, 4, 'h');
                     window.setTimeout(() => {
                         reloadNuxtApp({path: "/"});
                     },3000);
 
-                } else {
-                    mfa.Message = data.message;
-                }
-                window.setTimeout(() => {
-                    mfa.Message = "";
-                    mfa.isDisabled=false;
-                },3000);
-
-            }).catch( (error) => {
-                mfa.Message(error.message);
-                window.setTimeout(() => {
-                    mfa.isDisabled=false;
-                    mfa.Message = "";
-                },3000);
-            });
-
+            } else {
+                mfa.Message = data.message;
+            }
+            window.setTimeout(() => {
+                mfa.Message = "";
+                mfa.isDisabled=false;
+            },3000);
     }
 </script>
 

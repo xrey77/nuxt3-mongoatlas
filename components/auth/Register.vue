@@ -82,10 +82,10 @@ import {reactive} from 'vue'
           $("#regReset").click();
         }
 
-        async function submitRegistration(e) {
+        async function submitRegistration(e: any) {
             e.preventDefault();
             $("#regMsg").text("please wait..");
-            await $fetch('/api/auth/signup', {
+            const data = await $fetch('/api/auth/signup', {
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -98,20 +98,18 @@ import {reactive} from 'vue'
                     'username': regform.username,
                     'password': regform.password
                 }
-            }).then((data) => {
-
-                if (data.statuscode === 200) {
-                    $("#regMsg").text(data.message);
-                } else {
-                    $("#regMsg").text(data.message);
-                }
-
-            }).catch( (error) => {
+            }).catch( (error: any) => {
                 $("#regMsg").text(error.message);
                 window.setTimeout(() => {
                     $("#regMsg").text('');
                 },3000);
+                return;
             });
+            if (data.statuscode === 200) {
+                    $("#regMsg").text(data.message);
+            } else {
+                $("#regMsg").text(data.message);
+            }
         }
 </script>
 

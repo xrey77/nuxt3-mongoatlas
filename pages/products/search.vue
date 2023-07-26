@@ -42,17 +42,21 @@ const vardata = reactive({
     listMsg: 'searching, please wait..'
 });
 
-const searchProducts = async (key) => {
+const searchProducts = async (key: any) => {
     vardata.isfound=true;
-    await $fetch(`/api/product/search?search=${key}`)
-    .then((data) => {
-        vardata.items = data.product;
-        vardata.listMsg = '';
-        vardata.isfound=false;
+    const data = await $fetch(`/api/product/search?search=${key}`)
+    .catch((error: any) => {
+      vardata.listMsg = error;
+      return;
     });
+    vardata.items = data.product;
+    vardata.isfound=false;
+    if (vardata.items) {
+      vardata.listMsg = '';
+    }
 }
 
-const submitSearchForm = (event) => {
+const submitSearchForm = (event: any) => {
   event.preventDefault();
   searchProducts(vardata.search);
 }

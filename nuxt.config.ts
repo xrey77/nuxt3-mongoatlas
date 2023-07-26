@@ -26,7 +26,14 @@ export default defineNuxtConfig({
       secret: "7bbc21c9826d9d54a4282aacbe9812f32a1dd1148d9be7246c7cecd7b3157b79c76144eea49b12bb4958db055e53a663d4695863ae73556abc47148d247b3830",
     }
   },
-  ssr: false,
+  ssr: true,
+  nitro: {
+    // baseURL: "http://localhost:3000",
+    prerender: {
+      crawlLinks: true,
+      failOnError: false, 
+    },
+  },  
   css: [
     '~/assets/styles/main.scss',
     "~/static/css/nuxt.css"
